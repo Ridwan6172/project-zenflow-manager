@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useMemo } from 'react';
 import { Project, ProjectFilters, SortConfig } from '../types/project';
 import { supabase } from '@/integrations/supabase/client';
@@ -157,7 +158,7 @@ export function useProjects() {
     let result = [...projects];
 
     // Apply filters
-    if (filters.assignedTo) {
+    if (filters.assignedTo && filters.assignedTo !== 'all') {
       result = result.filter(p =>
         p.assignedTo.toLowerCase().includes(filters.assignedTo.toLowerCase())
       );

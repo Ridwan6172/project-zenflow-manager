@@ -162,7 +162,7 @@ export default function ProjectFilters({
                 <SelectValue placeholder="Select person" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All</SelectItem>
+                <SelectItem value="all">All</SelectItem>
                 {uniqueAssignees.map((person) => (
                   <SelectItem key={person} value={person}>
                     {person}
