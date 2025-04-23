@@ -1,7 +1,7 @@
-
 import { useState, useEffect, useMemo } from 'react';
 import { Project, ProjectFilters, SortConfig } from '../types/project';
 import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 // Utility to convert supabase DB row to Project interface (with Dates)
 const dbToProject = (row: any): Project => ({
@@ -34,6 +34,8 @@ const projectToDb = (project: Omit<Project, 'id'>) => ({
 
 export function useProjects() {
   const [projects, setProjects] = useState<Project[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState<ProjectFilters>({
     dateRange: { start: null, end: null },
     assignedTo: '',
@@ -48,62 +50,106 @@ export function useProjects() {
   // Fetch projects from Supabase
   useEffect(() => {
     const fetchProjects = async () => {
-      const { data, error } = await supabase
-        .from('projects')
-        .select('*')
-        .order('created_at', { ascending: false });
-      if (error) {
-        console.error('Failed to fetch projects:', error);
+      setIsLoading(true);
+      setError(null);
+      
+      try {
+        const { data, error } = await supabase
+          .from('projects')
+          .select('*');
+          
+        if (error) {
+          throw error;
+        }
+        
+        setProjects(data.map(dbToProject));
+      } catch (err: any) {
+        console.error('Failed to fetch projects:', err);
+        setError(`Failed to load projects: ${err.message || 'Unknown error'}`);
+        toast.error(`Failed to load projects: ${err.message || 'Unknown error'}`);
         setProjects([]);
-        return;
+      } finally {
+        setIsLoading(false);
       }
-      setProjects(data.map(dbToProject));
     };
+    
     fetchProjects();
   }, []);
 
   // Add a new project
   const addProject = async (project: Omit<Project, 'id'>) => {
-    // Add created_at/updated_at handled by supabase default, user_id is managed by logged-in context (here must be set manually because project.user_id is required)
-    // We'll leave user_id as null for now as there's no auth context yet, fix this once auth is added!
-    const { data, error } = await supabase
-      .from('projects')
-      .insert([{ ...projectToDb(project), user_id: '00000000-0000-0000-0000-000000000000' }]) // TEMP: user_id placeholder
-      .select();
-    if (error) {
-      console.error('Failed to add project:', error);
-      return;
-    }
-    if (data && data.length > 0) {
-      setProjects((prev) => [...prev, dbToProject(data[0])]);
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .insert([{ ...projectToDb(project), user_id: null }])
+        .select();
+        
+      if (error) {
+        throw error;
+      }
+      
+      if (data && data.length > 0) {
+        setProjects((prev) => [...prev, dbToProject(data[0])]);
+        toast.success('Project added successfully');
+        return true;
+      }
+      return false;
+    } catch (err: any) {
+      console.error('Failed to add project:', err);
+      toast.error(`Failed to add project: ${err.message || 'Unknown error'}`);
+      return false;
     }
   };
 
   // Update an existing project
   const updateProject = async (updatedProject: Project) => {
-    const { id, ...rest } = updatedProject;
-    const { data, error } = await supabase
-      .from('projects')
-      .update(projectToDb(rest))
-      .eq('id', id)
-      .select();
-    if (error) {
-      console.error('Failed to update project:', error);
-      return;
+    try {
+      const { id, ...rest } = updatedProject;
+      const { data, error } = await supabase
+        .from('projects')
+        .update(projectToDb(rest))
+        .eq('id', id)
+        .select();
+        
+      if (error) {
+        throw error;
+      }
+      
+      if (data && data.length > 0) {
+        setProjects((prev) =>
+          prev.map((proj) => (proj.id === id ? dbToProject(data[0]) : proj))
+        );
+        toast.success('Project updated successfully');
+        return true;
+      }
+      return false;
+    } catch (err: any) {
+      console.error('Failed to update project:', err);
+      toast.error(`Failed to update project: ${err.message || 'Unknown error'}`);
+      return false;
     }
-    setProjects((prev) =>
-      prev.map((proj) => (proj.id === id ? dbToProject(data[0]) : proj))
-    );
   };
 
   // Delete a project
   const deleteProject = async (id: string) => {
-    const { error } = await supabase.from('projects').delete().eq('id', id);
-    if (error) {
-      console.error('Failed to delete project:', error);
-      return;
+    try {
+      const { error } = await supabase
+        .from('projects')
+        .delete()
+        .eq('id', id);
+        
+      if (error) {
+        throw error;
+      }
+      
+      setProjects((prev) => prev.filter((proj) => proj.id !== id));
+      toast.success('Project deleted successfully');
+      return true;
+    } catch (err: any) {
+      console.error('Failed to delete project:', err);
+      toast.error(`Failed to delete project: ${err.message || 'Unknown error'}`);
+      return false;
     }
-    setProjects((prev) => prev.filter((proj) => proj.id !== id));
   };
 
   // Filter and sort projects
@@ -191,6 +237,8 @@ export function useProjects() {
 
   return {
     projects: filteredAndSortedProjects,
+    isLoading,
+    error,
     addProject,
     updateProject,
     deleteProject,
@@ -201,4 +249,3 @@ export function useProjects() {
     getUniqueAssignees
   };
 }
-
