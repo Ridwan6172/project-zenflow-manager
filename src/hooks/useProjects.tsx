@@ -1,66 +1,39 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { Project, ProjectFilters, SortConfig } from '../types/project';
-import { v4 as uuidv4 } from 'uuid';
+import { supabase } from '@/integrations/supabase/client';
 
-// Sample data for initial projects
-const sampleProjects: Project[] = [
-  {
-    id: uuidv4(),
-    name: 'Website Redesign',
-    assignedTo: 'John Smith',
-    clientName: 'Acme Corp',
-    clientAddress: '123 Business Ave, Suite 100, New York, NY 10001',
-    nextMeeting: new Date(Date.now() + 86400000 * 3), // 3 days from now
-    budget: 12500,
-    startDate: new Date(Date.now() - 86400000 * 30), // 30 days ago
-    endDate: new Date(Date.now() + 86400000 * 30), // 30 days from now
-    remarks: 'Phase 1 completed, moving to Phase 2',
-    status: 'active'
-  },
-  {
-    id: uuidv4(),
-    name: 'Mobile App Development',
-    assignedTo: 'Sarah Johnson',
-    clientName: 'TechStart Inc',
-    clientAddress: '456 Innovation Blvd, San Francisco, CA 94107',
-    nextMeeting: new Date(Date.now() + 86400000 * 1), // 1 day from now
-    budget: 45000,
-    startDate: new Date(Date.now() - 86400000 * 60), // 60 days ago
-    endDate: new Date(Date.now() + 86400000 * 90), // 90 days from now
-    remarks: 'Backend integration in progress',
-    status: 'active'
-  },
-  {
-    id: uuidv4(),
-    name: 'Brand Identity Redesign',
-    assignedTo: 'Michael Chen',
-    clientName: 'Fresh Foods Co',
-    clientAddress: '789 Market St, Chicago, IL 60601',
-    nextMeeting: new Date(Date.now() + 86400000 * 7), // 7 days from now
-    budget: 8750,
-    startDate: new Date(Date.now() - 86400000 * 15), // 15 days ago
-    endDate: null, // Ongoing
-    remarks: 'Logo concepts approved, working on style guide',
-    status: 'active'
-  },
-  {
-    id: uuidv4(),
-    name: 'E-commerce Platform',
-    assignedTo: 'Emily Rodriguez',
-    clientName: 'Boutique Brands',
-    clientAddress: '321 Fashion Ave, Miami, FL 33101',
-    nextMeeting: null, // No meeting scheduled
-    budget: 27500,
-    startDate: new Date(Date.now() - 86400000 * 120), // 120 days ago
-    endDate: new Date(Date.now() - 86400000 * 10), // 10 days ago
-    remarks: 'Project completed, waiting for final review',
-    status: 'completed'
-  }
-];
+// Utility to convert supabase DB row to Project interface (with Dates)
+const dbToProject = (row: any): Project => ({
+  id: row.id,
+  name: row.name,
+  assignedTo: row.assigned_to,
+  clientName: row.client_name,
+  clientAddress: row.client_address,
+  nextMeeting: row.next_meeting ? new Date(row.next_meeting) : null,
+  budget: Number(row.budget),
+  startDate: new Date(row.start_date),
+  endDate: row.end_date ? new Date(row.end_date) : null,
+  remarks: row.remarks || '',
+  status: row.status,
+});
+
+// Utility to convert Project to DB object for insert/update
+const projectToDb = (project: Omit<Project, 'id'>) => ({
+  name: project.name,
+  assigned_to: project.assignedTo,
+  client_name: project.clientName,
+  client_address: project.clientAddress,
+  next_meeting: project.nextMeeting ? project.nextMeeting.toISOString() : null,
+  budget: project.budget,
+  start_date: project.startDate.toISOString().substring(0, 10), // yyyy-mm-dd
+  end_date: project.endDate ? project.endDate.toISOString().substring(0, 10) : null,
+  remarks: project.remarks,
+  status: project.status,
+});
 
 export function useProjects() {
-  const [projects, setProjects] = useState<Project[]>(sampleProjects);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [filters, setFilters] = useState<ProjectFilters>({
     dateRange: { start: null, end: null },
     assignedTo: '',
@@ -72,25 +45,65 @@ export function useProjects() {
     direction: 'asc'
   });
 
-  // Add a new project
-  const addProject = (project: Omit<Project, 'id'>) => {
-    const newProject = {
-      ...project,
-      id: uuidv4()
+  // Fetch projects from Supabase
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (error) {
+        console.error('Failed to fetch projects:', error);
+        setProjects([]);
+        return;
+      }
+      setProjects(data.map(dbToProject));
     };
-    setProjects([...projects, newProject]);
+    fetchProjects();
+  }, []);
+
+  // Add a new project
+  const addProject = async (project: Omit<Project, 'id'>) => {
+    // Add created_at/updated_at handled by supabase default, user_id is managed by logged-in context (here must be set manually because project.user_id is required)
+    // We'll leave user_id as null for now as there's no auth context yet, fix this once auth is added!
+    const { data, error } = await supabase
+      .from('projects')
+      .insert([{ ...projectToDb(project), user_id: '00000000-0000-0000-0000-000000000000' }]) // TEMP: user_id placeholder
+      .select();
+    if (error) {
+      console.error('Failed to add project:', error);
+      return;
+    }
+    if (data && data.length > 0) {
+      setProjects((prev) => [...prev, dbToProject(data[0])]);
+    }
   };
 
   // Update an existing project
-  const updateProject = (updatedProject: Project) => {
-    setProjects(projects.map(project => 
-      project.id === updatedProject.id ? updatedProject : project
-    ));
+  const updateProject = async (updatedProject: Project) => {
+    const { id, ...rest } = updatedProject;
+    const { data, error } = await supabase
+      .from('projects')
+      .update(projectToDb(rest))
+      .eq('id', id)
+      .select();
+    if (error) {
+      console.error('Failed to update project:', error);
+      return;
+    }
+    setProjects((prev) =>
+      prev.map((proj) => (proj.id === id ? dbToProject(data[0]) : proj))
+    );
   };
 
   // Delete a project
-  const deleteProject = (id: string) => {
-    setProjects(projects.filter(project => project.id !== id));
+  const deleteProject = async (id: string) => {
+    const { error } = await supabase.from('projects').delete().eq('id', id);
+    if (error) {
+      console.error('Failed to delete project:', error);
+      return;
+    }
+    setProjects((prev) => prev.filter((proj) => proj.id !== id));
   };
 
   // Filter and sort projects
@@ -99,7 +112,7 @@ export function useProjects() {
 
     // Apply filters
     if (filters.assignedTo) {
-      result = result.filter(p => 
+      result = result.filter(p =>
         p.assignedTo.toLowerCase().includes(filters.assignedTo.toLowerCase())
       );
     }
@@ -109,29 +122,29 @@ export function useProjects() {
     }
 
     if (filters.dateRange.start) {
-      result = result.filter(p => 
-        p.startDate >= filters.dateRange.start! || 
+      result = result.filter(p =>
+        p.startDate >= filters.dateRange.start! ||
         (p.endDate && p.endDate >= filters.dateRange.start!)
       );
     }
 
     if (filters.dateRange.end) {
-      result = result.filter(p => 
-        p.startDate <= filters.dateRange.end! || 
+      result = result.filter(p =>
+        p.startDate <= filters.dateRange.end! ||
         (p.endDate && p.endDate <= filters.dateRange.end!)
       );
     }
 
     if (filters.upcomingMeetings) {
       const now = new Date();
-      result = result.filter(p => 
+      result = result.filter(p =>
         p.nextMeeting && p.nextMeeting > now
       );
     }
 
     // Sort results
     result.sort((a, b) => {
-      let aValue, bValue;
+      let aValue: any, bValue: any;
 
       // Handle different field types for sorting
       switch (sort.field) {
@@ -188,3 +201,4 @@ export function useProjects() {
     getUniqueAssignees
   };
 }
+
