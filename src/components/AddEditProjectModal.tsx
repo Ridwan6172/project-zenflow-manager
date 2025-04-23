@@ -307,7 +307,9 @@ export default function AddEditProjectModal({
             <Label htmlFor="status">Status</Label>
             <Select
               value={formData.status}
-              onValueChange={(value: 'active' | 'completed') => handleChange('status', value)}
+              onValueChange={(
+                value: 'active' | 'completed' | 'waiting'
+              ) => handleChange('status', value)}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select status" />
@@ -315,6 +317,7 @@ export default function AddEditProjectModal({
               <SelectContent>
                 <SelectItem value="active">Active</SelectItem>
                 <SelectItem value="completed">Completed</SelectItem>
+                <SelectItem value="waiting">Waiting</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -344,3 +347,4 @@ export default function AddEditProjectModal({
     </Dialog>
   );
 }
+
