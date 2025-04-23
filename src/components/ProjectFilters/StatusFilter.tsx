@@ -24,6 +24,7 @@ export default function StatusFilter({ status, setStatus }: StatusFilterProps) {
           <SelectItem value="all">All</SelectItem>
           <SelectItem value="active">Active</SelectItem>
           <SelectItem value="completed">Completed</SelectItem>
+          <SelectItem value="waiting">Waiting</SelectItem>
         </SelectContent>
       </Select>
     </div>

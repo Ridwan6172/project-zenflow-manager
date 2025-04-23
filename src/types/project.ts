@@ -10,7 +10,7 @@ export interface Project {
   startDate: Date;
   endDate: Date | null;
   remarks: string;
-  status: 'active' | 'completed';
+  status: 'active' | 'completed' | 'waiting'; // Updated to include 'waiting'
 }
 
 export type ProjectFormData = Omit<Project, 'id'>;
@@ -21,7 +21,7 @@ export interface ProjectFilters {
     end: Date | null;
   };
   assignedTo: string;
-  status: 'all' | 'active' | 'completed';
+  status: 'all' | 'active' | 'completed' | 'waiting'; // Updated to include 'waiting'
   upcomingMeetings: boolean;
 }
 
