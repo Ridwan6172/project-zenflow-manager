@@ -9,11 +9,7 @@ interface UpcomingMeetingsFilterProps {
 export default function UpcomingMeetingsFilter({ upcomingMeetings, setUpcomingMeetings }: UpcomingMeetingsFilterProps) {
   return (
     <div className="flex items-center mt-6">
-      <Checkbox
-        id="upcomingMeetings"
-        checked={upcomingMeetings}
-        onCheckedChange={(checked) => setUpcomingMeetings(!!checked)}
-      />
+
       <label htmlFor="upcomingMeetings" className="ml-2 text-sm font-medium">
        
       </label>
