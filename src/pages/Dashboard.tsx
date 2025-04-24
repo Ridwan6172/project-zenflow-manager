@@ -5,14 +5,14 @@ body {
   color: #333;
 }
 
-// .container {
-//   max-width: 100%; /* Allows the container to stretch fully */
-//   margin: 0 auto;
-//   padding: 20px;
-//   background-color: white;
-//   border-radius: 10px;
-//   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-// }
+.container {
+  max-width: 100%; /* Allows the container to stretch fully */
+  margin: 0 auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
 
 
 /* Header */
