@@ -136,10 +136,12 @@ button .mr-1 {
 
 /* Table Styles */
 .ProjectTable table {
-  width: 100%;
-  border-collapse: collapse;
+  width: 100%; /* Makes the table responsive */
+  max-width: 1200px; /* Increases the max width */
   margin-top: 20px;
+  border-collapse: collapse;
 }
+
 
 .ProjectTable th, .ProjectTable td {
   padding: 15px;
