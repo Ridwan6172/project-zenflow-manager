@@ -14,9 +14,7 @@ const config: Config = {
       center: true,
       padding: "2rem",
       screens: {
-        "2xl": "1400px", // Keep existing 2xl breakpoint
-        "3xl": "1600px", // New breakpoint for 3xl
-        "4xl": "1920px", // New breakpoint for 4xl
+        "2xl": "1400px",
       },
     },
     extend: {
