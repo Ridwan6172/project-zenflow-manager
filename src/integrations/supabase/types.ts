@@ -13,9 +13,9 @@ export type Database = {
         Row: {
           assigned_to: string
           budget: number
-          client_address: string
           client_country: string | null
           client_name: string
+          completion_percentage: number
           created_at: string | null
           end_date: string
           end_date_notes: string | null
@@ -34,9 +34,9 @@ export type Database = {
         Insert: {
           assigned_to: string
           budget?: number
-          client_address: string
           client_country?: string | null
           client_name: string
+          completion_percentage?: number
           created_at?: string | null
           end_date: string
           end_date_notes?: string | null
@@ -55,9 +55,9 @@ export type Database = {
         Update: {
           assigned_to?: string
           budget?: number
-          client_address?: string
           client_country?: string | null
           client_name?: string
+          completion_percentage?: number
           created_at?: string | null
           end_date?: string
           end_date_notes?: string | null

@@ -1,5 +1,4 @@
-
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { Calendar } from 'lucide-react';
 import { Project, ProjectFormData } from '../types/project';
@@ -44,7 +43,6 @@ const initialFormData: ProjectFormData = {
   name: '',
   assignedTo: '',
   clientName: '',
-  clientAddress: '',
   clientCountry: '',
   techStack: '',
   milestone: '',
@@ -147,17 +145,6 @@ export default function AddEditProjectModal({
               />
               {errors.clientName && <p className="text-sm text-red-500">{errors.clientName}</p>}
             </div>
-          </div>
-
-          {/* Client Address */}
-          <div className="space-y-2">
-            <Label htmlFor="clientAddress">Client Address</Label>
-            <Textarea
-              id="clientAddress"
-              value={formData.clientAddress}
-              onChange={(e) => handleChange('clientAddress', e.target.value)}
-              placeholder="Enter client address"
-            />
           </div>
 
           {/* Project Name & Assigned To */}

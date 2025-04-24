@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { format } from 'date-fns';
 import { Edit, Trash, Calendar, ChevronDown, ChevronUp } from 'lucide-react';
@@ -165,19 +164,7 @@ export default function ProjectTable({
                 <TableRow key={project.id}>
                   <TableCell>{project.clientCountry}</TableCell>
                   <TableCell>
-                    <div>
-                      {project.clientName}
-                      {project.clientAddress && (
-                        <Popover>
-                          <PopoverTrigger className="text-xs text-blue-500 block hover:underline">
-                            View Address
-                          </PopoverTrigger>
-                          <PopoverContent className="w-80">
-                            <p className="text-sm">{project.clientAddress}</p>
-                          </PopoverContent>
-                        </Popover>
-                      )}
-                    </div>
+                    {project.clientName}
                   </TableCell>
                   <TableCell className="font-medium">{project.name}</TableCell>
                   <TableCell>{project.assignedTo}</TableCell>

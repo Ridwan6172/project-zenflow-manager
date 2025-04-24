@@ -1,10 +1,8 @@
-
 export interface Project {
   id: string;
   name: string;
   assignedTo: string;
   clientName: string;
-  clientAddress: string;
   clientCountry: string;
   techStack: string;
   milestone: string;
