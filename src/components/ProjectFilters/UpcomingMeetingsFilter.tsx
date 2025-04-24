@@ -15,7 +15,7 @@ export default function UpcomingMeetingsFilter({ upcomingMeetings, setUpcomingMe
         onCheckedChange={(checked) => setUpcomingMeetings(!!checked)}
       />
       <label htmlFor="upcomingMeetings" className="ml-2 text-sm font-medium">
-        Show only projects with upcoming meetings
+       
       </label>
     </div>
   );
