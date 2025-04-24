@@ -1,3 +1,4 @@
+/* Root Container Styling */
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -5,38 +6,49 @@
   text-align: center;
 }
 
+/* Logo Styling */
 .logo {
   height: 6em;
   padding: 1.5em;
+  transition: filter 300ms ease;
   will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
+.logo:hover {
+  filter: drop-shadow(0 0 2em rgba(100, 108, 255, 0.67));
+}
+
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em rgba(97, 218, 251, 0.67));
+}
+
+/* Logo Animation */
 @keyframes logo-spin {
-  from {
+  0% {
     transform: rotate(0deg);
   }
-  to {
+  100% {
     transform: rotate(360deg);
   }
 }
 
+/* Accessibility: Reduce Motion Respect */
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
   }
 }
 
+/* Card Component */
 .card {
   padding: 2em;
+  background-color: #fff;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
+/* Utility Text */
 .read-the-docs {
   color: #888;
+  font-size: 0.9rem;
 }
