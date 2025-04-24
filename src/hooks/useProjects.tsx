@@ -1,34 +1,41 @@
-
 import { useState, useEffect, useMemo } from 'react';
 import { Project, ProjectFilters, SortConfig } from '../types/project';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
-// Utility to convert supabase DB row to Project interface (with Dates)
 const dbToProject = (row: any): Project => ({
   id: row.id,
   name: row.name,
   assignedTo: row.assigned_to,
   clientName: row.client_name,
   clientAddress: row.client_address,
+  clientCountry: row.client_country || '',
+  techStack: row.tech_stack || '',
+  milestone: row.milestone || '',
+  nextAction: row.next_action || '',
   nextMeeting: row.next_meeting ? new Date(row.next_meeting) : null,
   budget: Number(row.budget),
   startDate: new Date(row.start_date),
   endDate: row.end_date ? new Date(row.end_date) : null,
+  endDateNotes: row.end_date_notes || '',
   remarks: row.remarks || '',
   status: row.status,
 });
 
-// Utility to convert Project to DB object for insert/update
 const projectToDb = (project: Omit<Project, 'id'>) => ({
   name: project.name,
   assigned_to: project.assignedTo,
   client_name: project.clientName,
   client_address: project.clientAddress,
+  client_country: project.clientCountry,
+  tech_stack: project.techStack,
+  milestone: project.milestone,
+  next_action: project.nextAction,
   next_meeting: project.nextMeeting ? project.nextMeeting.toISOString() : null,
   budget: project.budget,
-  start_date: project.startDate.toISOString().substring(0, 10), // yyyy-mm-dd
+  start_date: project.startDate.toISOString().substring(0, 10),
   end_date: project.endDate ? project.endDate.toISOString().substring(0, 10) : null,
+  end_date_notes: project.endDateNotes,
   remarks: project.remarks,
   status: project.status,
 });
@@ -48,7 +55,6 @@ export function useProjects() {
     direction: 'asc'
   });
 
-  // Fetch projects from Supabase
   useEffect(() => {
     const fetchProjects = async () => {
       setIsLoading(true);
@@ -77,7 +83,6 @@ export function useProjects() {
     fetchProjects();
   }, []);
 
-  // Add a new project
   const addProject = async (project: Omit<Project, 'id'>) => {
     try {
       const { data, error } = await supabase
@@ -102,7 +107,6 @@ export function useProjects() {
     }
   };
 
-  // Update an existing project
   const updateProject = async (updatedProject: Project) => {
     try {
       const { id, ...rest } = updatedProject;
@@ -131,7 +135,6 @@ export function useProjects() {
     }
   };
 
-  // Delete a project
   const deleteProject = async (id: string) => {
     try {
       const { error } = await supabase
@@ -153,11 +156,9 @@ export function useProjects() {
     }
   };
 
-  // Filter and sort projects
   const filteredAndSortedProjects = useMemo(() => {
     let result = [...projects];
 
-    // Apply filters
     if (filters.assignedTo && filters.assignedTo !== 'all') {
       result = result.filter(p =>
         p.assignedTo.toLowerCase().includes(filters.assignedTo.toLowerCase())
@@ -189,11 +190,9 @@ export function useProjects() {
       );
     }
 
-    // Sort results
     result.sort((a, b) => {
       let aValue: any, bValue: any;
 
-      // Handle different field types for sorting
       switch (sort.field) {
         case 'name':
           aValue = a.name;
@@ -220,7 +219,6 @@ export function useProjects() {
           bValue = b.name;
       }
 
-      // Sort based on direction
       if (sort.direction === 'asc') {
         return aValue > bValue ? 1 : -1;
       } else {
@@ -231,7 +229,6 @@ export function useProjects() {
     return result;
   }, [projects, filters, sort]);
 
-  // Get unique values for filter dropdowns
   const getUniqueAssignees = () => {
     return Array.from(new Set(projects.map(p => p.assignedTo)));
   };

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { Calendar } from 'lucide-react';
@@ -44,10 +43,15 @@ const initialFormData: ProjectFormData = {
   assignedTo: '',
   clientName: '',
   clientAddress: '',
+  clientCountry: '',
+  techStack: '',
+  milestone: '',
+  nextAction: '',
   nextMeeting: null,
   budget: 0,
   startDate: new Date(),
   endDate: null,
+  endDateNotes: '',
   remarks: '',
   status: 'active',
 };
@@ -158,19 +162,49 @@ export default function AddEditProjectModal({
               {errors.clientName && <p className="text-sm text-red-500">{errors.clientName}</p>}
             </div>
             
-            {/* Budget */}
+            {/* Client Country */}
             <div className="space-y-2">
-              <Label htmlFor="budget">Budget ($)*</Label>
+              <Label htmlFor="clientCountry">Client Country</Label>
               <Input
-                id="budget"
-                type="number"
-                value={formData.budget}
-                onChange={(e) => handleChange('budget', parseFloat(e.target.value) || 0)}
-                placeholder="Enter budget amount"
-                className={errors.budget ? 'border-red-500' : ''}
+                id="clientCountry"
+                value={formData.clientCountry}
+                onChange={(e) => handleChange('clientCountry', e.target.value)}
+                placeholder="Enter client country"
               />
-              {errors.budget && <p className="text-sm text-red-500">{errors.budget}</p>}
             </div>
+          </div>
+
+          {/* Tech Stack */}
+          <div className="space-y-2">
+            <Label htmlFor="techStack">Tech Stack</Label>
+            <Input
+              id="techStack"
+              value={formData.techStack}
+              onChange={(e) => handleChange('techStack', e.target.value)}
+              placeholder="Enter tech stack (e.g., React, Node.js, PostgreSQL)"
+            />
+          </div>
+
+          {/* Milestone */}
+          <div className="space-y-2">
+            <Label htmlFor="milestone">Milestone</Label>
+            <Input
+              id="milestone"
+              value={formData.milestone}
+              onChange={(e) => handleChange('milestone', e.target.value)}
+              placeholder="Enter current milestone"
+            />
+          </div>
+
+          {/* Next Action */}
+          <div className="space-y-2">
+            <Label htmlFor="nextAction">Next Action</Label>
+            <Input
+              id="nextAction"
+              value={formData.nextAction}
+              onChange={(e) => handleChange('nextAction', e.target.value)}
+              placeholder="Enter next action"
+            />
           </div>
 
           {/* Client Address */}
@@ -250,56 +284,32 @@ export default function AddEditProjectModal({
                 </PopoverContent>
               </Popover>
               {errors.endDate && <p className="text-sm text-red-500">{errors.endDate}</p>}
+              
+              {/* End Date Notes */}
+              <div className="mt-2">
+                <Label htmlFor="endDateNotes">End Date Notes</Label>
+                <Input
+                  id="endDateNotes"
+                  value={formData.endDateNotes}
+                  onChange={(e) => handleChange('endDateNotes', e.target.value)}
+                  placeholder="Add notes about end date"
+                />
+              </div>
             </div>
           </div>
 
-          {/* Next Meeting */}
+          {/* Budget */}
           <div className="space-y-2">
-            <Label>Next Meeting</Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start text-left font-normal"
-                >
-                  <Calendar className="mr-2 h-4 w-4" />
-                  {formData.nextMeeting ? (
-                    format(formData.nextMeeting, "PPP HH:mm")
-                  ) : (
-                    <span>Schedule next meeting</span>
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <div className="p-3">
-                  <CalendarComponent
-                    mode="single"
-                    selected={formData.nextMeeting || undefined}
-                    onSelect={(date) => handleChange('nextMeeting', date)}
-                    initialFocus
-                    className="pointer-events-auto"
-                  />
-                  {formData.nextMeeting && (
-                    <div className="mt-4">
-                      <Label>Time</Label>
-                      <Input
-                        type="time"
-                        value={formData.nextMeeting ? format(formData.nextMeeting, "HH:mm") : ""}
-                        onChange={(e) => {
-                          if (formData.nextMeeting && e.target.value) {
-                            const [hours, minutes] = e.target.value.split(':');
-                            const newDate = new Date(formData.nextMeeting);
-                            newDate.setHours(parseInt(hours), parseInt(minutes));
-                            handleChange('nextMeeting', newDate);
-                          }
-                        }}
-                        className="mt-1"
-                      />
-                    </div>
-                  )}
-                </div>
-              </PopoverContent>
-            </Popover>
+            <Label htmlFor="budget">Budget ($)*</Label>
+            <Input
+              id="budget"
+              type="number"
+              value={formData.budget}
+              onChange={(e) => handleChange('budget', parseFloat(e.target.value) || 0)}
+              placeholder="Enter budget amount"
+              className={errors.budget ? 'border-red-500' : ''}
+            />
+            {errors.budget && <p className="text-sm text-red-500">{errors.budget}</p>}
           </div>
 
           {/* Status */}
@@ -307,9 +317,9 @@ export default function AddEditProjectModal({
             <Label htmlFor="status">Status</Label>
             <Select
               value={formData.status}
-              onValueChange={(
-                value: 'active' | 'completed' | 'waiting'
-              ) => handleChange('status', value)}
+              onValueChange={(value: 'active' | 'completed' | 'waiting' | 'cancelled') => 
+                handleChange('status', value)
+              }
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select status" />
@@ -318,6 +328,7 @@ export default function AddEditProjectModal({
                 <SelectItem value="active">Active</SelectItem>
                 <SelectItem value="completed">Completed</SelectItem>
                 <SelectItem value="waiting">Waiting</SelectItem>
+                <SelectItem value="cancelled">Cancelled</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -347,4 +358,3 @@ export default function AddEditProjectModal({
     </Dialog>
   );
 }
-
