@@ -6,13 +6,14 @@ body {
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 100%; /* Allows the container to stretch fully */
   margin: 0 auto;
   padding: 20px;
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
+
 
 /* Header */
 h1 {
@@ -136,8 +137,7 @@ button .mr-1 {
 
 /* Table Styles */
 .ProjectTable table {
-  width: 100%; /* Makes the table responsive */
-  max-width: 1200px; /* Increases the max width */
+  width: 100%; /* Ensures the table takes up 100% of the available width */
   margin-top: 20px;
   border-collapse: collapse;
 }
