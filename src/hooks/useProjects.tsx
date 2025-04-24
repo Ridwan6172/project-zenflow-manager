@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useMemo } from 'react';
 import { Project, ProjectFilters, SortConfig } from '../types/project';
 import { supabase } from '@/integrations/supabase/client';
@@ -9,7 +8,6 @@ const dbToProject = (row: any): Project => ({
   name: row.name,
   assignedTo: row.assigned_to,
   clientName: row.client_name,
-  clientAddress: row.client_address,
   clientCountry: row.client_country || '',
   techStack: row.tech_stack || '',
   milestone: row.milestone || '',
@@ -28,7 +26,6 @@ const projectToDb = (project: Omit<Project, 'id'>) => ({
   name: project.name,
   assigned_to: project.assignedTo,
   client_name: project.clientName,
-  client_address: project.clientAddress,
   client_country: project.clientCountry,
   tech_stack: project.techStack,
   milestone: project.milestone,
