@@ -13,6 +13,7 @@ const sortFields = [
   { field: "nextMeeting", label: "Meeting Date" },
   { field: "startDate", label: "Start Date" },
   { field: "endDate", label: "End Date" },
+  { field: "completionPercentage", label: "Completion %" },
 ] as const;
 
 export default function SortButtons({ sort, setSort }: SortButtonsProps) {

@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useMemo } from 'react';
 import { Project, ProjectFilters, SortConfig } from '../types/project';
 import { supabase } from '@/integrations/supabase/client';
@@ -20,6 +21,7 @@ const dbToProject = (row: any): Project => ({
   endDateNotes: row.end_date_notes || '',
   remarks: row.remarks || '',
   status: row.status,
+  completionPercentage: Number(row.completion_percentage) || 0,
 });
 
 const projectToDb = (project: Omit<Project, 'id'>) => ({
@@ -38,6 +40,7 @@ const projectToDb = (project: Omit<Project, 'id'>) => ({
   end_date_notes: project.endDateNotes,
   remarks: project.remarks,
   status: project.status,
+  completion_percentage: project.completionPercentage,
 });
 
 export function useProjects() {
@@ -51,8 +54,8 @@ export function useProjects() {
     upcomingMeetings: false
   });
   const [sort, setSort] = useState<SortConfig>({
-    field: 'name',
-    direction: 'asc'
+    field: 'completionPercentage',
+    direction: 'desc'
   });
 
   useEffect(() => {
@@ -213,6 +216,10 @@ export function useProjects() {
         case 'endDate':
           aValue = a.endDate ? a.endDate.getTime() : Number.MAX_SAFE_INTEGER;
           bValue = b.endDate ? b.endDate.getTime() : Number.MAX_SAFE_INTEGER;
+          break;
+        case 'completionPercentage':
+          aValue = a.completionPercentage;
+          bValue = b.completionPercentage;
           break;
         default:
           aValue = a.name;

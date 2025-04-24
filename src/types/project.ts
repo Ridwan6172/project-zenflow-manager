@@ -16,6 +16,7 @@ export interface Project {
   endDateNotes: string;
   remarks: string;
   status: 'active' | 'completed' | 'waiting' | 'cancelled';
+  completionPercentage: number;
 }
 
 export type ProjectFormData = Omit<Project, 'id'>;
@@ -30,7 +31,7 @@ export interface ProjectFilters {
   upcomingMeetings: boolean;
 }
 
-export type SortField = 'name' | 'budget' | 'nextMeeting' | 'startDate' | 'endDate';
+export type SortField = 'name' | 'budget' | 'nextMeeting' | 'startDate' | 'endDate' | 'completionPercentage';
 export type SortDirection = 'asc' | 'desc';
 
 export interface SortConfig {
