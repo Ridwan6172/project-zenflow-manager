@@ -6,10 +6,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ProjectFilters } from "@/types/project";
 
 interface StatusFilterProps {
-  status: string;
-  setStatus: (value: string) => void;
+  status: ProjectFilters['status'];
+  setStatus: (value: ProjectFilters['status']) => void;
 }
 
 export default function StatusFilter({ status, setStatus }: StatusFilterProps) {
@@ -25,6 +26,7 @@ export default function StatusFilter({ status, setStatus }: StatusFilterProps) {
           <SelectItem value="active">Active</SelectItem>
           <SelectItem value="completed">Completed</SelectItem>
           <SelectItem value="waiting">Waiting</SelectItem>
+          <SelectItem value="cancelled">Cancelled</SelectItem>
         </SelectContent>
       </Select>
     </div>

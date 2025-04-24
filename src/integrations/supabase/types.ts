@@ -14,15 +14,20 @@ export type Database = {
           assigned_to: string
           budget: number
           client_address: string
+          client_country: string | null
           client_name: string
           created_at: string | null
           end_date: string
+          end_date_notes: string | null
           id: string
+          milestone: string | null
           name: string
+          next_action: string | null
           next_meeting: string | null
           remarks: string | null
           start_date: string
           status: string
+          tech_stack: string | null
           updated_at: string | null
           user_id: string | null
         }
@@ -30,15 +35,20 @@ export type Database = {
           assigned_to: string
           budget?: number
           client_address: string
+          client_country?: string | null
           client_name: string
           created_at?: string | null
           end_date: string
+          end_date_notes?: string | null
           id?: string
+          milestone?: string | null
           name: string
+          next_action?: string | null
           next_meeting?: string | null
           remarks?: string | null
           start_date: string
           status?: string
+          tech_stack?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
@@ -46,15 +56,20 @@ export type Database = {
           assigned_to?: string
           budget?: number
           client_address?: string
+          client_country?: string | null
           client_name?: string
           created_at?: string | null
           end_date?: string
+          end_date_notes?: string | null
           id?: string
+          milestone?: string | null
           name?: string
+          next_action?: string | null
           next_meeting?: string | null
           remarks?: string | null
           start_date?: string
           status?: string
+          tech_stack?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
