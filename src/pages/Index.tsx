@@ -2,11 +2,7 @@
 import Dashboard from './Dashboard';
 
 const Index = () => {
-  return (
-    <div className="min-h-screen w-full">
-      <Dashboard />
-    </div>
-  );
+  return <Dashboard />;
 };
 
 export default Index;
