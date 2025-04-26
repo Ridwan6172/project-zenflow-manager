@@ -120,196 +120,201 @@ export default function ProjectTable({
   
   return (
     <>
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-semibold">Projects List</h2>
+      <div className="flex justify-between items-center mb-4 p-4 glass-card">
+        <h2 className="text-xl font-semibold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">
+          Projects Overview
+        </h2>
         <div className="flex items-center gap-2">
           <Toggle 
             pressed={showDeleteButtons} 
             onPressedChange={setShowDeleteButtons}
-            variant="outline"
-            aria-label="Show delete buttons"
+            className="hover:bg-purple-100"
           >
             {showDeleteButtons ? 'Hide Delete' : 'Show Delete'}
           </Toggle>
         </div>
       </div>
-      <div className="rounded-md border bg-white overflow-hidden">
-        <Table>
-          <TableHeader className="bg-gray-50">
-            <TableRow>
-              <TableHead className="w-[160px]">Client Country</TableHead>
-              <TableHead className="w-[180px]">Client Name</TableHead>
-              <TableHead className="w-[180px]">Project Name</TableHead>
-              <TableHead>Assigned To</TableHead>
-              <TableHead className="hidden lg:table-cell">Tech Stack</TableHead>
-              <TableHead>Budget</TableHead>
-              <TableHead className="hidden lg:table-cell">Milestone</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Completion %</TableHead>
-              <TableHead>Remarks</TableHead>
-              <TableHead className="hidden lg:table-cell">Start/End Date</TableHead>
-              <TableHead className="hidden md:table-cell">Next Action</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {projects.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={13} className="h-24 text-center">
-                  No projects found.
-                </TableCell>
+
+      <div className="rounded-xl border bg-white shadow-lg overflow-hidden">
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-gradient-to-r from-purple-50 to-blue-50">
+                <TableHead className="w-[160px] font-bold">Client Country</TableHead>
+                <TableHead className="w-[180px] font-bold">Client Name</TableHead>
+                <TableHead className="w-[180px] font-bold">Project Name</TableHead>
+                <TableHead className="font-bold">Assigned To</TableHead>
+                <TableHead className="hidden lg:table-cell font-bold">Tech Stack</TableHead>
+                <TableHead className="font-bold">Budget</TableHead>
+                <TableHead className="hidden lg:table-cell font-bold">Milestone</TableHead>
+                <TableHead className="font-bold">Status</TableHead>
+                <TableHead className="font-bold">Completion %</TableHead>
+                <TableHead className="font-bold">Remarks</TableHead>
+                <TableHead className="hidden lg:table-cell font-bold">Start/End Date</TableHead>
+                <TableHead className="hidden md:table-cell font-bold">Next Action</TableHead>
+                <TableHead className="text-right font-bold">Actions</TableHead>
               </TableRow>
-            ) : (
-              projects.map((project) => (
-                <TableRow key={project.id}>
-                  <TableCell>{project.clientCountry}</TableCell>
-                  <TableCell>
-                    {project.clientName}
+            </TableHeader>
+
+            <TableBody>
+              {projects.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={13} className="h-24 text-center text-muted-foreground">
+                    No projects found.
                   </TableCell>
-                  <TableCell className="font-medium">{project.name}</TableCell>
-                  <TableCell>{project.assignedTo}</TableCell>
-                  <TableCell className="hidden lg:table-cell">{project.techStack}</TableCell>
-                  <TableCell>
-                    {editingBudget?.id === project.id ? (
-                      <div className="flex items-center space-x-2">
-                        <Input
-                          type="number"
-                          value={editingBudget.value}
-                          onChange={(e) => setEditingBudget({ 
-                            ...editingBudget, 
-                            value: parseFloat(e.target.value) || 0 
-                          })}
-                          className="w-24"
-                          onBlur={handleSaveBudget}
-                          onKeyDown={(e) => e.key === 'Enter' && handleSaveBudget()}
-                          autoFocus
-                        />
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => setEditingBudget({ id: project.id, value: project.budget })}
-                        className="hover:text-blue-500"
-                      >
-                        {formatCurrency(project.budget)}
-                      </button>
-                    )}
-                  </TableCell>
-                  <TableCell className="hidden lg:table-cell">{project.milestone || '-'}</TableCell>
-                  <TableCell>
-                    <Badge 
-                      variant="outline" 
-                      className={cn("text-white", getStatusColor(project.status))}
-                    >
-                      {project.status.charAt(0).toUpperCase() + project.status.slice(1)}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    {editingCompletionPercentage?.id === project.id ? (
-                      <div className="flex flex-col gap-2 w-24">
-                        <Input
-                          type="number"
-                          min="0"
-                          max="100"
-                          value={editingCompletionPercentage.value}
-                          onChange={(e) => setEditingCompletionPercentage({ 
-                            ...editingCompletionPercentage, 
-                            value: Math.min(100, Math.max(0, parseInt(e.target.value) || 0))
-                          })}
-                          className="w-full"
-                          onBlur={handleSaveCompletionPercentage}
-                          onKeyDown={(e) => e.key === 'Enter' && handleSaveCompletionPercentage()}
-                          autoFocus
-                        />
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => setEditingCompletionPercentage({ id: project.id, value: project.completionPercentage })}
-                        className="hover:text-blue-500 w-full"
-                      >
-                        <div className="flex items-center gap-2">
-                          <Progress value={project.completionPercentage} className="h-2 w-16" />
-                          <span>{project.completionPercentage}%</span>
+                </TableRow>
+              ) : (
+                projects.map((project) => (
+                  <TableRow 
+                    key={project.id}
+                    className="hover:bg-purple-50/50 transition-colors"
+                  >
+                    <TableCell>{project.clientCountry}</TableCell>
+                    <TableCell className="font-medium">{project.clientName}</TableCell>
+                    <TableCell className="font-medium text-purple-700">{project.name}</TableCell>
+                    <TableCell>{project.assignedTo}</TableCell>
+                    <TableCell className="hidden lg:table-cell">{project.techStack}</TableCell>
+                    <TableCell>
+                      {editingBudget?.id === project.id ? (
+                        <div className="flex items-center space-x-2">
+                          <Input
+                            type="number"
+                            value={editingBudget.value}
+                            onChange={(e) => setEditingBudget({ 
+                              ...editingBudget, 
+                              value: parseFloat(e.target.value) || 0 
+                            })}
+                            className="w-24"
+                            onBlur={handleSaveBudget}
+                            onKeyDown={(e) => e.key === 'Enter' && handleSaveBudget()}
+                            autoFocus
+                          />
                         </div>
-                      </button>
-                    )}
-                  </TableCell>
-                  <TableCell className="max-w-[200px]">
-                    {editingRemarks?.id === project.id ? (
-                      <div className="flex items-center space-x-2">
-                        <Input
-                          value={editingRemarks.value}
-                          onChange={(e) => setEditingRemarks({ 
-                            ...editingRemarks, 
-                            value: e.target.value 
-                          })}
-                          onBlur={handleSaveRemarks}
-                          onKeyDown={(e) => e.key === 'Enter' && handleSaveRemarks()}
-                          autoFocus
-                        />
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => setEditingRemarks({ id: project.id, value: project.remarks })}
-                        className="text-left text-sm truncate hover:text-blue-500 max-w-[160px] block"
-                        title={project.remarks}
-                      >
-                        {project.remarks || "Add remarks..."}
-                      </button>
-                    )}
-                  </TableCell>
-                  <TableCell className="hidden lg:table-cell whitespace-nowrap">
-                    <div className="text-xs">
-                      <span>From: {format(project.startDate, "MMM d, yyyy")}</span>
-                      <br />
-                      <span>
-                        To: {project.endDate ? format(project.endDate, "MMM d, yyyy") : "Ongoing"}
-                        {project.endDateNotes && (
-                          <Popover>
-                            <PopoverTrigger className="text-xs text-blue-500 ml-1 hover:underline">
-                              (Notes)
-                            </PopoverTrigger>
-                            <PopoverContent className="w-80">
-                              <p className="text-sm">{project.endDateNotes}</p>
-                            </PopoverContent>
-                          </Popover>
-                        )}
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    {project.nextAction || 
-                      <span className="text-gray-400 text-sm">No action</span>
-                    }
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex items-center justify-end space-x-2">
-                      <Button 
+                      ) : (
+                        <button
+                          onClick={() => setEditingBudget({ id: project.id, value: project.budget })}
+                          className="hover:text-blue-500"
+                        >
+                          {formatCurrency(project.budget)}
+                        </button>
+                      )}
+                    </TableCell>
+                    <TableCell className="hidden lg:table-cell">{project.milestone || '-'}</TableCell>
+                    <TableCell>
+                      <Badge 
                         variant="outline" 
-                        size="icon" 
-                        onClick={() => handleEditClick(project)}
+                        className={cn("text-white", getStatusColor(project.status))}
                       >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      {showDeleteButtons && (
+                        {project.status.charAt(0).toUpperCase() + project.status.slice(1)}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      {editingCompletionPercentage?.id === project.id ? (
+                        <div className="flex flex-col gap-2 w-24">
+                          <Input
+                            type="number"
+                            min="0"
+                            max="100"
+                            value={editingCompletionPercentage.value}
+                            onChange={(e) => setEditingCompletionPercentage({ 
+                              ...editingCompletionPercentage, 
+                              value: Math.min(100, Math.max(0, parseInt(e.target.value) || 0))
+                            })}
+                            className="w-full"
+                            onBlur={handleSaveCompletionPercentage}
+                            onKeyDown={(e) => e.key === 'Enter' && handleSaveCompletionPercentage()}
+                            autoFocus
+                          />
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => setEditingCompletionPercentage({ id: project.id, value: project.completionPercentage })}
+                          className="hover:text-blue-500 w-full"
+                        >
+                          <div className="flex items-center gap-2">
+                            <Progress value={project.completionPercentage} className="h-2 w-16" />
+                            <span>{project.completionPercentage}%</span>
+                          </div>
+                        </button>
+                      )}
+                    </TableCell>
+                    <TableCell className="max-w-[200px]">
+                      {editingRemarks?.id === project.id ? (
+                        <div className="flex items-center space-x-2">
+                          <Input
+                            value={editingRemarks.value}
+                            onChange={(e) => setEditingRemarks({ 
+                              ...editingRemarks, 
+                              value: e.target.value 
+                            })}
+                            onBlur={handleSaveRemarks}
+                            onKeyDown={(e) => e.key === 'Enter' && handleSaveRemarks()}
+                            autoFocus
+                          />
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => setEditingRemarks({ id: project.id, value: project.remarks })}
+                          className="text-left text-sm truncate hover:text-blue-500 max-w-[160px] block"
+                          title={project.remarks}
+                        >
+                          {project.remarks || "Add remarks..."}
+                        </button>
+                      )}
+                    </TableCell>
+                    <TableCell className="hidden lg:table-cell whitespace-nowrap">
+                      <div className="text-xs">
+                        <span>From: {format(project.startDate, "MMM d, yyyy")}</span>
+                        <br />
+                        <span>
+                          To: {project.endDate ? format(project.endDate, "MMM d, yyyy") : "Ongoing"}
+                          {project.endDateNotes && (
+                            <Popover>
+                              <PopoverTrigger className="text-xs text-blue-500 ml-1 hover:underline">
+                                (Notes)
+                              </PopoverTrigger>
+                              <PopoverContent className="w-80">
+                                <p className="text-sm">{project.endDateNotes}</p>
+                              </PopoverContent>
+                            </Popover>
+                          )}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell">
+                      {project.nextAction || 
+                        <span className="text-gray-400 text-sm">No action</span>
+                      }
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex items-center justify-end space-x-2">
                         <Button 
                           variant="outline" 
                           size="icon" 
-                          onClick={() => handleDeleteClick(project)}
-                          className="text-red-500 hover:text-red-500"
+                          onClick={() => handleEditClick(project)}
                         >
-                          <Trash className="h-4 w-4" />
+                          <Edit className="h-4 w-4" />
                         </Button>
-                      )}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+                        {showDeleteButtons && (
+                          <Button 
+                            variant="outline" 
+                            size="icon" 
+                            onClick={() => handleDeleteClick(project)}
+                            className="text-red-500 hover:text-red-500"
+                          >
+                            <Trash className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </div>
 
-      {/* Edit Project Modal */}
       <AddEditProjectModal
         isOpen={editModalOpen}
         onClose={() => setEditModalOpen(false)}
@@ -318,7 +323,6 @@ export default function ProjectTable({
         isEdit={true}
       />
       
-      {/* Delete Confirmation Modal */}
       <DeleteConfirmModal
         project={deletingProject}
         isOpen={deleteModalOpen}
