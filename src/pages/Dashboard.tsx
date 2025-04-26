@@ -24,7 +24,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 to-blue-500">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 max-w-[1600px]"> {/* Increased max-width */}
         <div className="dashboard-header bg-white/80 backdrop-blur-md rounded-xl shadow-lg p-6 mb-6">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">
             Project Management Dashboard
