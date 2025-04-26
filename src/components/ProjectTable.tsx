@@ -119,39 +119,39 @@ export default function ProjectTable({
   };
   
   return (
-    <div className="w-full overflow-x-auto">
-      <div className="flex justify-between items-center mb-4 p-4 glass-card">
-        <h2 className="text-xl font-semibold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">
+    <div className="w-full">
+      <div className="flex justify-between items-center mb-4 p-4 bg-white">
+        <h2 className="text-xl font-semibold text-gray-800">
           Projects Overview
         </h2>
         <div className="flex items-center gap-2">
           <Toggle 
             pressed={showDeleteButtons} 
             onPressedChange={setShowDeleteButtons}
-            className="hover:bg-purple-100"
+            className="hover:bg-gray-100"
           >
             {showDeleteButtons ? 'Hide Delete' : 'Show Delete'}
           </Toggle>
         </div>
       </div>
 
-      <div className="w-full overflow-x-auto rounded-xl border bg-white shadow-lg">
-        <Table className="w-full min-w-[1400px]">
+      <div className="w-full bg-white shadow-lg rounded-xl">
+        <Table>
           <TableHeader>
-            <TableRow className="bg-gradient-to-r from-purple-50 to-blue-50">
-              <TableHead className="whitespace-nowrap font-bold w-[100px]">Client Country</TableHead>
-              <TableHead className="whitespace-nowrap font-bold w-[120px]">Client Name</TableHead>
-              <TableHead className="whitespace-nowrap font-bold w-[150px]">Project Name</TableHead>
-              <TableHead className="whitespace-nowrap font-bold w-[100px]">Assigned To</TableHead>
-              <TableHead className="whitespace-nowrap font-bold w-[100px]">Tech Stack</TableHead>
-              <TableHead className="whitespace-nowrap font-bold w-[100px]">Budget</TableHead>
-              <TableHead className="whitespace-nowrap font-bold w-[100px]">Milestone</TableHead>
-              <TableHead className="whitespace-nowrap font-bold w-[100px]">Status</TableHead>
-              <TableHead className="whitespace-nowrap font-bold w-[120px]">Completion %</TableHead>
-              <TableHead className="whitespace-nowrap font-bold w-[200px]">Remarks</TableHead>
-              <TableHead className="whitespace-nowrap font-bold w-[150px]">Start/End Date</TableHead>
-              <TableHead className="whitespace-nowrap font-bold w-[120px]">Next Action</TableHead>
-              <TableHead className="text-right whitespace-nowrap font-bold w-[100px]">Actions</TableHead>
+            <TableRow className="bg-gray-50">
+              <TableHead className="w-[8%]">Client Country</TableHead>
+              <TableHead className="w-[10%]">Client Name</TableHead>
+              <TableHead className="w-[12%]">Project Name</TableHead>
+              <TableHead className="w-[8%]">Assigned To</TableHead>
+              <TableHead className="w-[8%]">Tech Stack</TableHead>
+              <TableHead className="w-[8%]">Budget</TableHead>
+              <TableHead className="w-[8%]">Milestone</TableHead>
+              <TableHead className="w-[8%]">Status</TableHead>
+              <TableHead className="w-[8%]">Completion %</TableHead>
+              <TableHead className="w-[10%]">Remarks</TableHead>
+              <TableHead className="w-[12%]">Start/End Date</TableHead>
+              <TableHead className="w-[8%]">Next Action</TableHead>
+              <TableHead className="w-[8%] text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
 
@@ -166,7 +166,7 @@ export default function ProjectTable({
               projects.map((project) => (
                 <TableRow 
                   key={project.id}
-                  className="hover:bg-purple-50/50 transition-colors"
+                  className="hover:bg-gray-50/50 transition-colors"
                 >
                   <TableCell className="whitespace-nowrap">{project.clientCountry}</TableCell>
                   <TableCell className="whitespace-nowrap font-medium">{project.clientName}</TableCell>

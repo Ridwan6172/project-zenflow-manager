@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { ProjectFilters as FilterType, SortConfig } from '../types/project';
 import { Button } from '@/components/ui/button';
@@ -40,7 +39,7 @@ export default function ProjectFilters({
   };
 
   return (
-    <Card className="w-full p-4 max-w-[1600px] mx-auto"> {/* Added max-width and centering */}
+    <Card className="w-full p-4">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
         <h2 className="text-lg font-semibold mb-2 md:mb-0">Project Filters</h2>
         <div className="flex gap-2">
