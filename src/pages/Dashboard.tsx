@@ -1,62 +1,55 @@
 
-/* Global Styles */
-body {
-  font-family: 'Inter', sans-serif;
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-  background: linear-gradient(145deg, #6a11cb, #2575fc);
-}
+import { useState } from 'react';
+import ProjectTable from '@/components/ProjectTable';
+import { useProjects } from '@/hooks/useProjects';
+import { Project } from '@/types/project';
+import ProjectFilters from '@/components/ProjectFilters';
 
-.container {
-  min-height: 100vh;
-  width: 100%;
-  padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-}
+const Dashboard = () => {
+  const { projects, isLoading, error, addProject, updateProject, deleteProject } = useProjects();
+  const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
 
-/* Header Styles */
-.dashboard-header {
-  margin-bottom: 2rem;
-  padding: 1rem;
-  background: white;
-  border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
+  const handleFilteredProjectsChange = (projects: Project[]) => {
+    setFilteredProjects(projects);
+  };
 
-h1 {
-  font-size: 2.25rem;
-  font-weight: 700;
-  background: linear-gradient(to right, #6a11cb, #2575fc);
-  -webkit-background-clip: text;
-  color: transparent;
-  margin-bottom: 0.5rem;
-}
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-purple-600 to-blue-500">
+      <div className="container mx-auto px-4 py-8 h-full">
+        <div className="dashboard-header bg-white/80 backdrop-blur-md rounded-xl shadow-lg p-6 mb-6">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">
+            Project Management Dashboard
+          </h1>
+          <p className="text-gray-600">Track and manage all your projects in one place</p>
+        </div>
 
-/* Table Container */
-.table-container {
-  background: white;
-  border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  overflow: hidden;
-}
+        <div className="bg-white/80 backdrop-blur-md rounded-xl shadow-lg p-6 mb-6">
+          <ProjectFilters 
+            projects={projects}
+            onFilteredProjectsChange={handleFilteredProjectsChange}
+          />
+        </div>
+        
+        <div className="glass-card">
+          {isLoading ? (
+            <div className="p-8 text-center">
+              <p className="text-xl text-white">Loading projects...</p>
+            </div>
+          ) : error ? (
+            <div className="p-8 text-center">
+              <p className="text-xl text-red-500">Error loading projects: {error.message}</p>
+            </div>
+          ) : (
+            <ProjectTable
+              projects={filteredProjects.length > 0 ? filteredProjects : projects}
+              onUpdateProject={updateProject}
+              onDeleteProject={deleteProject}
+            />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .container {
-    padding: 1rem;
-  }
-
-  h1 {
-    font-size: 1.875rem;
-  }
-}
-
-/* Glass Effect for Cards */
-.glass-card {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 1rem;
-}
+export default Dashboard;
