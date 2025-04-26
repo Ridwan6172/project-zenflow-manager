@@ -1,4 +1,10 @@
 
+import { useState } from 'react';
+import { Project } from '../types/project';
+import { useProjects } from '../hooks/useProjects';
+import ProjectTable from '../components/ProjectTable';
+import ProjectFilters from '../components/ProjectFilters';
+
 const Dashboard = () => {
   const { 
     projects, 
