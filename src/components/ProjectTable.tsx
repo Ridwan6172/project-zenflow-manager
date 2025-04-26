@@ -135,23 +135,25 @@ export default function ProjectTable({
         </div>
       </div>
 
-      <div className="w-full bg-white shadow-lg rounded-xl">
+    <div className="w-full overflow-x-auto max-w-screen bg-white shadow-lg rounded-xl">
+
         <Table>
           <TableHeader>
             <TableRow className="bg-gray-50">
-              <TableHead className="w-[8%]">Client Country</TableHead>
-              <TableHead className="w-[10%]">Client Name</TableHead>
-              <TableHead className="w-[12%]">Project Name</TableHead>
-              <TableHead className="w-[8%]">Assigned To</TableHead>
-              <TableHead className="w-[8%]">Tech Stack</TableHead>
-              <TableHead className="w-[8%]">Budget</TableHead>
-              <TableHead className="w-[8%]">Milestone</TableHead>
-              <TableHead className="w-[8%]">Status</TableHead>
-              <TableHead className="w-[8%]">Completion %</TableHead>
-              <TableHead className="w-[10%]">Remarks</TableHead>
-              <TableHead className="w-[12%]">Start/End Date</TableHead>
-              <TableHead className="w-[8%]">Next Action</TableHead>
-              <TableHead className="w-[8%] text-right">Actions</TableHead>
+              <TableHead className="w-[6%]">Client Country</TableHead>
+<TableHead className="w-[8%]">Client Name</TableHead>
+<TableHead className="w-[10%]">Project Name</TableHead>
+<TableHead className="w-[6%]">Assigned To</TableHead>
+<TableHead className="w-[6%]">Tech Stack</TableHead>
+<TableHead className="w-[7%]">Budget</TableHead>
+<TableHead className="w-[7%]">Milestone</TableHead>
+<TableHead className="w-[7%]">Status</TableHead>
+<TableHead className="w-[7%]">Completion %</TableHead>
+<TableHead className="w-[10%]">Remarks</TableHead>
+<TableHead className="w-[10%]">Start/End Date</TableHead>
+<TableHead className="w-[7%]">Next Action</TableHead>
+<TableHead className="w-[7%] text-right">Actions</TableHead>
+
             </TableRow>
           </TableHeader>
 
