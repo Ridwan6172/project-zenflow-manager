@@ -1,17 +1,25 @@
-
 import { useState } from 'react';
 import ProjectTable from '@/components/ProjectTable';
 import { useProjects } from '@/hooks/useProjects';
-import { Project } from '@/types/project';
 import ProjectFilters from '@/components/ProjectFilters';
+import { Project } from '@/types/project';
 
 const Dashboard = () => {
-  const { projects, isLoading, error, addProject, updateProject, deleteProject } = useProjects();
+  const { 
+    projects, 
+    isLoading, 
+    error, 
+    addProject, 
+    updateProject, 
+    deleteProject,
+    filters,
+    setFilters,
+    sort,
+    setSort,
+    getUniqueAssignees
+  } = useProjects();
+  
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
-
-  const handleFilteredProjectsChange = (projects: Project[]) => {
-    setFilteredProjects(projects);
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 to-blue-500">
@@ -25,8 +33,11 @@ const Dashboard = () => {
 
         <div className="bg-white/80 backdrop-blur-md rounded-xl shadow-lg p-6 mb-6">
           <ProjectFilters 
-            projects={projects}
-            onFilteredProjectsChange={handleFilteredProjectsChange}
+            filters={filters}
+            setFilters={setFilters}
+            sort={sort}
+            setSort={setSort}
+            uniqueAssignees={getUniqueAssignees()}
           />
         </div>
         
@@ -37,11 +48,11 @@ const Dashboard = () => {
             </div>
           ) : error ? (
             <div className="p-8 text-center">
-              <p className="text-xl text-red-500">Error loading projects: {error.message}</p>
+              <p className="text-xl text-red-500">Error loading projects: {error}</p>
             </div>
           ) : (
             <ProjectTable
-              projects={filteredProjects.length > 0 ? filteredProjects : projects}
+              projects={projects}
               onUpdateProject={updateProject}
               onDeleteProject={deleteProject}
             />
