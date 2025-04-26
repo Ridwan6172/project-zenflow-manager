@@ -10,6 +10,7 @@ body {
 .container {
   min-height: 100vh;
   width: 100%;
+  max-width: 100%;
 }
 
 /* Header Styles */
@@ -32,4 +33,17 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 1rem;
   overflow: hidden;
+}
+
+/* Table Responsive Styles */
+.table-scroll-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* Update table UI components */
+@media (max-width: 1200px) {
+  .container {
+    padding: 1rem;
+  }
 }

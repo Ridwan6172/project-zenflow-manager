@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import ProjectTable from '@/components/ProjectTable';
 import { useProjects } from '@/hooks/useProjects';
@@ -23,7 +24,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 to-blue-500">
-      <div className="container mx-auto px-4 py-8 h-full">
+      <div className="container mx-auto px-4 py-8">
         <div className="dashboard-header bg-white/80 backdrop-blur-md rounded-xl shadow-lg p-6 mb-6">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">
             Project Management Dashboard
@@ -41,7 +42,7 @@ const Dashboard = () => {
           />
         </div>
         
-        <div className="glass-card">
+        <div className="glass-card overflow-hidden">
           {isLoading ? (
             <div className="p-8 text-center">
               <p className="text-xl text-white">Loading projects...</p>

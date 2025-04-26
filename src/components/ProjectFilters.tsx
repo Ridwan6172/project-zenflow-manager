@@ -7,6 +7,7 @@ import AssignedToFilter from './ProjectFilters/AssignedToFilter';
 import StatusFilter from './ProjectFilters/StatusFilter';
 import UpcomingMeetingsFilter from './ProjectFilters/UpcomingMeetingsFilter';
 import SortButtons from './ProjectFilters/SortButtons';
+import { Card } from '@/components/ui/card';
 
 interface ProjectFiltersProps {
   filters: FilterType;
@@ -39,7 +40,7 @@ export default function ProjectFilters({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border p-4 mb-6">
+    <Card className="w-full p-4">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
         <h2 className="text-lg font-semibold mb-2 md:mb-0">Project Filters</h2>
         <div className="flex gap-2">
@@ -61,7 +62,7 @@ export default function ProjectFilters({
       </div>
 
       {isFilterExpanded && (
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
           <DateRangeFilter
             dateRange={filters.dateRange}
             setDateRange={(range) => setFilters({ ...filters, dateRange: range })}
@@ -88,6 +89,6 @@ export default function ProjectFilters({
           <SortButtons sort={sort} setSort={setSort} />
         </div>
       )}
-    </div>
+    </Card>
   );
 }
