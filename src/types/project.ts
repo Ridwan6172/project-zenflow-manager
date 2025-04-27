@@ -15,6 +15,7 @@ export interface Project {
   remarks: string;
   status: 'active' | 'completed' | 'waiting' | 'cancelled';
   completionPercentage: number;
+  projectType: 'AI' | 'NON AI';
 }
 
 export type ProjectFormData = Omit<Project, 'id'>;
@@ -27,6 +28,7 @@ export interface ProjectFilters {
   assignedTo: string;
   status: 'all' | 'active' | 'completed' | 'waiting' | 'cancelled';
   upcomingMeetings: boolean;
+  projectType: 'all' | 'AI' | 'NON AI';
 }
 
 export type SortField = 'name' | 'budget' | 'nextMeeting' | 'startDate' | 'endDate' | 'completionPercentage';

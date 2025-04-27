@@ -55,6 +55,7 @@ const initialFormData: ProjectFormData = {
   remarks: '',
   status: 'active',
   completionPercentage: 0,
+  projectType: 'NON AI',
 };
 
 export default function AddEditProjectModal({
@@ -77,7 +78,6 @@ export default function AddEditProjectModal({
 
   const handleChange = (field: keyof ProjectFormData, value: any) => {
     setFormData({ ...formData, [field]: value });
-    // Clear error when user edits the field
     if (errors[field]) {
       setErrors({ ...errors, [field]: undefined });
     }
@@ -359,6 +359,23 @@ export default function AddEditProjectModal({
               onChange={(e) => handleChange('nextAction', e.target.value)}
               placeholder="Enter next action"
             />
+          </div>
+
+          {/* Project Type Selection */}
+          <div className="space-y-2">
+            <Label htmlFor="projectType">Project Type</Label>
+            <Select
+              value={formData.projectType}
+              onValueChange={(value: 'AI' | 'NON AI') => handleChange('projectType', value)}
+            >
+              <SelectTrigger id="projectType">
+                <SelectValue placeholder="Select project type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="AI">AI</SelectItem>
+                <SelectItem value="NON AI">NON AI</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
         

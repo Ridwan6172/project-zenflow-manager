@@ -24,6 +24,7 @@ export type Database = {
           name: string
           next_action: string | null
           next_meeting: string | null
+          project_type: string
           remarks: string | null
           start_date: string
           status: string
@@ -45,6 +46,7 @@ export type Database = {
           name: string
           next_action?: string | null
           next_meeting?: string | null
+          project_type?: string
           remarks?: string | null
           start_date: string
           status?: string
@@ -66,6 +68,7 @@ export type Database = {
           name?: string
           next_action?: string | null
           next_meeting?: string | null
+          project_type?: string
           remarks?: string | null
           start_date?: string
           status?: string

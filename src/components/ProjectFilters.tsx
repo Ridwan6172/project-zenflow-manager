@@ -1,9 +1,11 @@
+
 import { useState } from 'react';
 import { ProjectFilters as FilterType, SortConfig } from '../types/project';
 import { Button } from '@/components/ui/button';
 import DateRangeFilter from './ProjectFilters/DateRangeFilter';
 import AssignedToFilter from './ProjectFilters/AssignedToFilter';
 import StatusFilter from './ProjectFilters/StatusFilter';
+import ProjectTypeFilter from './ProjectFilters/ProjectTypeFilter';
 import UpcomingMeetingsFilter from './ProjectFilters/UpcomingMeetingsFilter';
 import SortButtons from './ProjectFilters/SortButtons';
 
@@ -61,6 +63,10 @@ export default function ProjectFilters({
 
       {isFilterExpanded && (
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
+          <ProjectTypeFilter
+            projectType={filters.projectType}
+            setProjectType={(val) => setFilters({ ...filters, projectType: val })}
+          />
           <DateRangeFilter
             dateRange={filters.dateRange}
             setDateRange={(range) => setFilters({ ...filters, dateRange: range })}

@@ -48,7 +48,8 @@ export function useProjects() {
     dateRange: { start: null, end: null },
     assignedTo: '',
     status: 'all',
-    upcomingMeetings: false
+    upcomingMeetings: false,
+    projectType: 'all'
   });
   const [sort, setSort] = useState<SortConfig>({
     field: 'completionPercentage',
@@ -188,6 +189,10 @@ export function useProjects() {
       result = result.filter(p =>
         p.nextMeeting && p.nextMeeting > now
       );
+    }
+
+    if (filters.projectType !== 'all') {
+      result = result.filter(p => p.projectType === filters.projectType);
     }
 
     result.sort((a, b) => {
