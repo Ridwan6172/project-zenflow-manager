@@ -31,7 +31,8 @@ export default function ProjectFilters({
       dateRange: { start: null, end: null },
       assignedTo: '',
       status: 'all',
-      upcomingMeetings: false
+      upcomingMeetings: false,
+      projectType: 'all'
     });
     setSort({
       field: 'name',

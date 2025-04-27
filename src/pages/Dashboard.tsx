@@ -23,7 +23,6 @@ const Dashboard = () => {
   } = useProjects();
 
   const [isAddModalOpen, setIsAddModalOpen] = React.useState(false);
-
   const uniqueAssignees = getUniqueAssignees();
 
   const handleAddProject = (projectData: any) => {
@@ -31,6 +30,10 @@ const Dashboard = () => {
     if (success) {
       setIsAddModalOpen(false);
     }
+  };
+
+  const handleTypeFilter = (type: 'AI' | 'NON AI' | 'all') => {
+    setFilters({ ...filters, projectType: type });
   };
 
   if (isLoading) {
@@ -47,6 +50,27 @@ const Dashboard = () => {
         <h1 className="text-2xl font-bold mb-4 sm:mb-0">Project Management Dashboard</h1>
         <Button onClick={() => setIsAddModalOpen(true)}>
           <Plus className="mr-1 h-4 w-4" /> Add Project
+        </Button>
+      </div>
+
+      <div className="mb-4 flex gap-2">
+        <Button 
+          variant={filters.projectType === 'all' ? 'default' : 'outline'}
+          onClick={() => handleTypeFilter('all')}
+        >
+          All Projects
+        </Button>
+        <Button 
+          variant={filters.projectType === 'AI' ? 'default' : 'outline'}
+          onClick={() => handleTypeFilter('AI')}
+        >
+          AI Projects
+        </Button>
+        <Button 
+          variant={filters.projectType === 'NON AI' ? 'default' : 'outline'}
+          onClick={() => handleTypeFilter('NON AI')}
+        >
+          NON AI Projects
         </Button>
       </div>
 
