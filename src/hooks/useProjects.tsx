@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useMemo } from 'react';
 import { Project, ProjectFilters, SortConfig } from '../types/project';
 import { supabase } from '@/integrations/supabase/client';
@@ -20,6 +21,7 @@ const dbToProject = (row: any): Project => ({
   remarks: row.remarks || '',
   status: row.status,
   completionPercentage: Number(row.completion_percentage) || 0,
+  projectType: row.project_type || 'NON AI', // Added this line to include projectType
 });
 
 const projectToDb = (project: Omit<Project, 'id'>) => ({
@@ -38,6 +40,7 @@ const projectToDb = (project: Omit<Project, 'id'>) => ({
   remarks: project.remarks,
   status: project.status,
   completion_percentage: project.completionPercentage,
+  project_type: project.projectType, // Added this line to include projectType
 });
 
 export function useProjects() {
