@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { format } from 'date-fns';
-import { Edit, Trash } from 'lucide-react';
-import { Project } from '../types/project';
+import { Edit, Trash, ArrowUp, ArrowDown } from 'lucide-react';
+import { Project, SortConfig } from '../types/project';
 import { Button } from '@/components/ui/button';
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow
@@ -36,6 +36,7 @@ export default function ProjectTable({
   const [editingRemarks, setEditingRemarks] = useState<{ id: string; value: string } | null>(null);
   const [editingCompletionPercentage, setEditingCompletionPercentage] = useState<{ id: string; value: number } | null>(null);
   const [showDeleteButtons, setShowDeleteButtons] = useState(false);
+  const [completionSort, setCompletionSort] = useState<'asc' | 'desc'>('desc');
 
   const formatCurrency = (value: number) =>
     new Intl.NumberFormat('en-US', {
@@ -107,6 +108,12 @@ export default function ProjectTable({
     }
   };
 
+  const sortedProjects = [...projects].sort((a, b) => {
+    return completionSort === 'asc' 
+      ? a.completionPercentage - b.completionPercentage
+      : b.completionPercentage - a.completionPercentage;
+  });
+
   return (
     <div className="w-full">
       <div className="flex justify-between items-center mb-4 p-4 bg-white">
@@ -134,7 +141,19 @@ export default function ProjectTable({
               <TableHead className="w-[7%]">Budget</TableHead>
               <TableHead className="w-[7%]">Milestone</TableHead>
               <TableHead className="w-[7%]">Status</TableHead>
-              <TableHead className="w-[7%]">Completion %</TableHead>
+              <TableHead className="w-[7%]">
+                <div className="flex items-center gap-2">
+                  Completion %
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-4 w-4 p-0"
+                    onClick={() => setCompletionSort(completionSort === 'asc' ? 'desc' : 'asc')}
+                  >
+                    {completionSort === 'asc' ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />}
+                  </Button>
+                </div>
+              </TableHead>
               <TableHead className="w-[10%]">Remarks</TableHead>
               <TableHead className="w-[10%]">Start/End Date</TableHead>
               <TableHead className="w-[7%]">Next Action</TableHead>
@@ -143,14 +162,14 @@ export default function ProjectTable({
           </TableHeader>
 
           <TableBody>
-            {projects.length === 0 ? (
+            {sortedProjects.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={13} className="h-24 text-center text-muted-foreground">
                   No projects found.
                 </TableCell>
               </TableRow>
             ) : (
-              projects.map(project => (
+              sortedProjects.map(project => (
                 <TableRow key={project.id} className="hover:bg-gray-50/50 transition-colors">
                   <TableCell>{project.clientCountry}</TableCell>
                   <TableCell className="font-medium">{project.clientName}</TableCell>
